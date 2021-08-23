@@ -1,0 +1,36 @@
+version: '3.6'
+services:
+    ispyagentdvr:
+        build: .
+        container_name: agentdvr
+        restart: unless-stopped
+        volumes:
+            - '/appdata/ispyagentdvr/config/:/agent/Media/XML/'
+            - '/appdata/ispyagentdvr/media/:/agent/Media/WebServerRoot/Media/'
+            - '/appdata/ispyagentdvr/commands:/agent/Commands/'
+        ports:
+            - '8090:8090'
+            - '3478:3478/udp'
+            - '50000-50010:50000-50010/udp'
+        # image: 'doitandbedone/ispyagentdvr:latest'
+    deepstack:
+        container_name: deepstack
+        restart: unless-stopped
+        environment:
+            - VISION-SCENE=True
+            - VISION-DETECTION=True
+        volumes:
+            - 'localstorage:/datastore'
+        ports:
+            - '5000:5000'
+        image: deepquestai/deepstack
+        # deploy:
+        #    resources:
+        #      reservations:
+        #        devices:
+        #          - capabilities:
+        #            - gpu
+  
+volumes:
+  localstorage:
+
